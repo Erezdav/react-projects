@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 const API_ENDPOINT = `https://www.omdbapi.com/?apikey=${process.env.REACT_APP_MOVIE_API_KEY}`;
 
 const useFetch = (urlParams) => {
@@ -8,13 +8,14 @@ const useFetch = (urlParams) => {
 
   const fetchMovies = async (url) => {
     setIsLoading(true);
+
     try {
-      const response = await fetch(url);
-      const data = await response.json();
+      const res = await fetch(url);
+      const data = await res.json();
 
       if (data.Response === "True") {
+        console.log(data);
         setData(data.Search || data);
-
         setError({ show: false, msg: "" });
       } else {
         setError({ show: true, msg: data.Error });
@@ -24,10 +25,10 @@ const useFetch = (urlParams) => {
       console.log(error);
     }
   };
-
   useEffect(() => {
     fetchMovies(`${API_ENDPOINT}${urlParams}`);
   }, [urlParams]);
+
   return { isLoading, error, data };
 };
 
